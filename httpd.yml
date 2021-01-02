@@ -1,0 +1,21 @@
+- hosts: demo
+  tasks:
+  - name: install httpd
+    package: 
+     name: httpd
+     state: present
+    register: x
+  - name: copy web pages
+    copy: 
+     dest: "/var/www/html/index.html"
+     content: "hello world new"
+    register: y
+  - name: starting services
+    service: 
+     name: httpd
+     state: started
+  - name: restarting services
+    service: 
+     name: httpd
+     state: restarted
+    when: x.changed==false and  y.changed==true
